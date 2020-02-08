@@ -1,11 +1,13 @@
-const rect = {
-  perimeter: (x, y) => {
-    return 2 * (x + y)
-  },
-  area: (x, y) => {
-    return x * y
-  }
-}
+// const rect = {
+//   perimeter: (x, y) => {
+//     return 2 * (x + y)
+//   },
+//   area: (x, y) => {
+//     return x * y
+//   }
+// }
+
+const rect = require('./rectangle')
 
 function solveRect(l, w) {
   console.log(`Solving for rect with dimensions: ${l}, ${w}`)
