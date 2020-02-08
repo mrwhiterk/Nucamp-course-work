@@ -26,3 +26,6 @@ solveRect(5, -3)
 
 // Code Challenge: Node Modules
 // completed glitch link - https://glitch.com/edit/#!/boatneck-ghost-vq28cvu32?path=server.js:7:0
+
+// Code Challenge: Node Modules 2 - with es6 imports
+//https://glitch.com/edit/#!/boatneck-ghost-vq28cvu32?path=server.mjs:3:84
