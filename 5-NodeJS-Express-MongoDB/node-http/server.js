@@ -53,3 +53,6 @@ const server = http.createServer((req, res) => {
 server.listen(port, hostname, () => {
   console.log(`Server running at http://${hostname}:${port}`)
 })
+
+//week 1 code challenge: callbacks glitch
+// https://glitch.com/edit/#!/gentle-suit-i9s3icoftb?path=server.js:22:29
