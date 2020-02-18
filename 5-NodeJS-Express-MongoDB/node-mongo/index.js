@@ -59,3 +59,6 @@ MongoClient.connect(url, { useUnifiedTopology: true })
   .catch(err => {
     console.log(err)
   })
+
+// finished code challenge: convert callbacks to promises
+// glitch -> https://glitch.com/edit/#!/caramel-ferret-fvebo2c1i
