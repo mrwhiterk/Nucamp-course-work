@@ -1,54 +1,61 @@
 const MongoClient = require('mongodb').MongoClient
-const assert = require('assert').strict
 const dboper = require('./operations')
 const url = 'mongodb://localhost:27017/'
 const dbname = 'nucampsite'
 
-MongoClient.connect(url, { useUnifiedTopology: true }, (err, client) => {
-  assert.strictEqual(err, null)
+MongoClient.connect(url, { useUnifiedTopology: true })
+  .then(client => {
+    console.log('connected to db server')
+    const db = client.db(dbname)
 
-  console.log('connected to db server')
+    db.dropCollection('campsites')
+      .then(result => {
+        console.log('dropped collection', result)
 
-  const db = client.db(dbname)
-
-  db.dropCollection('campsites', (err, result) => {
-    assert.strictEqual(err, null)
-    console.log('dropped collection', result)
-
-    dboper.insertDocument(
-      db,
-      { name: 'breadcrumb trail campground', description: 'test' },
-      'campsites',
-      result => {
+        return dboper.insertDocument(
+          db,
+          { name: 'breadcrumb trail campground', description: 'test' },
+          'campsites'
+        )
+      })
+      .then(result => {
         console.log('insert document: ', result.ops)
 
-        dboper.findDocuments(db, 'campsites', docs => {
-          console.log('found docs: ', docs)
+        return dboper.findDocuments(db, 'campsites')
+      })
+      .then(docs => {
+        console.log('found docs: ', docs)
 
-          dboper.updateDocument(
-            db,
-            { name: 'breadcrumb trail campground' },
-            { description: 'updated test description' },
-            'campsites',
-            result => {
-              console.log('updated document count: ', result.result.nModified)
-              dboper.findDocuments(db, 'campsites', docs => {
-                console.log('found documents: ', docs)
+        return dboper.updateDocument(
+          db,
+          { name: 'breadcrumb trail campground' },
+          { description: 'updated test description' },
+          'campsites'
+        )
+      })
+      .then(result => {
+        console.log('updated document count: ', result.result.nModified)
 
-                dboper.removeDocument(
-                  db,
-                  { name: 'breadcrumb trail campground' },
-                  'campsites',
-                  result => {
-                    console.log('deleted document count: ', result.deletedCount)
-                    client.close()
-                  }
-                )
-              })
-            }
-          )
+        return dboper.findDocuments(db, 'campsites').then(docs => {
+          console.log('found documents: ', docs)
+
+          return dboper
+            .removeDocument(
+              db,
+              { name: 'breadcrumb trail campground' },
+              'campsites'
+            )
+            .then(result => {
+              console.log('deleted document count: ', result.deletedCount)
+              return client.close()
+            })
+            .catch(err => {
+              console.log(err)
+              client.close()
+            })
         })
-      }
-    )
+      })
   })
-})
+  .catch(err => {
+    console.log(err)
+  })
