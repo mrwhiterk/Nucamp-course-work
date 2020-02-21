@@ -5,6 +5,7 @@ const url = "mongodb://localhost:27017/nucampsite";
 
 const connect = mongoose.connect(url, {
   useCreateIndex: true,
+  useFindAndModify: false,
   useNewUrlParser: true,
   useUnifiedTopology: true
 });
@@ -12,22 +13,45 @@ const connect = mongoose.connect(url, {
 connect.then(() => {
   console.log("Connected correctly to server");
 
-  const newCampsite = new Campsite({
+  Campsite.create({
     name: "React Lake Campground",
     description: "test"
-  });
-
-  newCampsite
-    .save()
+  })
     .then(campsite => {
       console.log(campsite);
-      return Campsite.find();
+
+      return Campsite.findByIdAndUpdate(
+        campsite._id,
+        {
+          $set: { description: "updated test document" },
+          $push: {
+            comments: {
+              rating: 5,
+              text: "great view",
+              author: "Tinus Lorvaldes"
+            }
+          }
+        },
+        {
+          new: true
+        }
+      );
     })
-    .then(campsites => {
-      console.log(campsites);
+    .then(campsite => {
+      console.log(campsite);
+      // campsite.comments.push({
+      //   rating: 5,
+      //   text: "great view",
+      //   author: "Tinus Lorvaldes"
+      // });
+
+      return campsite.save();
+    })
+    .then(campsite => {
+      console.log(campsite);
       return Campsite.deleteMany();
     })
-    .then(() => {
+    .then(result => {
       return mongoose.connection.close();
     })
     .catch(err => {
