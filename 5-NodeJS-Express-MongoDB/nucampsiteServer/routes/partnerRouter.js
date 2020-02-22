@@ -1,67 +1,72 @@
-const express = require('express')
+const Partner = require("../models/partner");
+const { Router } = require("express");
+const router = Router();
 
-const partnerRouter = express.Router()
+router.get("/", (req, res) => {
+  Partner.find()
+    .then(partners => {
+      res.send(partners);
+    })
+    .catch(err => {
+      res.status(400).send(err);
+    });
+});
 
-partnerRouter
-  .route('/')
-  .all((req, res, next) => {
-    res.statusCode = 200
-    res.setHeader('Content-Type', 'text/plain')
-    next()
-  })
-  .get((req, res) => {
-    res.send('Will send all the partners to you in time')
-  })
-  .post((req, res) => {
-    res.send(
-      'will add the partner: ' +
-        req.body.name +
-        ' with desc: ' +
-        req.body.description
-    )
-  })
-  .put((req, res) => {
-    res.statusCode = 403
-    res.end('put not supported')
-  })
-  .delete((req, res) => {
-    res.end('deleting all partners')
-  })
+router.post("/", (req, res) => {
+  Partner.create(req.body)
+    .then(partner => {
+      res.send(partner);
+    })
+    .catch(err => res.status(400).send(err));
+});
 
-partnerRouter
-  .route('/:partnerId')
-  .all((req, res, next) => {
-    res.statusCode = 200
-    res.setHeader('Content-Type', 'text/plain')
-    next()
-  })
-  .get((req, res) => {
-    console.log('hit')
-    res.send('Will send all the partners to you id: ' + req.params.partnerId)
-  })
-  .post((req, res) => {
-    res.send(
-      'will add the partner: ' +
-        req.body.name +
-        ' with desc: ' +
-        req.body.description +
-        ' id: ' +
-        req.params.partnerId
-    )
-  })
-  .put((req, res) => {
-    res.statusCode = 403
-    res.send(
-      'will update the partner: ' +
-        req.body.name +
-        ' with desc: ' +
-        req.body.description +
-        ' id: ' +
-        req.params.partnerId
-    )
-  })
-  .delete((req, res) => {
-    res.end('deleting partner with id: ' + req.params.partnerId)
-  })
+router.put("/", (req, res) => {
+  res.statusCode = 403;
+  res.end("put not supported");
+});
 
-module.exports = partnerRouter
+router.delete("/", (req, res) => {
+  Partner.deleteMany()
+    .then(response => {
+      res.send(response);
+    })
+    .catch(err => res.status(400).send(err));
+});
+
+router.get("/:partnerId", (req, res) => {
+  Partner.findById(req.params.partnerId)
+    .then(partner => {
+      res.send(partner);
+    })
+    .catch(err => res.status(400).send(err));
+});
+
+router.post("/:partnerId", (req, res) => {
+  res
+    .status(403)
+    .send(`POST operation not supported on /partners/${req.params.partnerId}`);
+});
+
+router.put("/:partnerId", (req, res) => {
+  Partner.findByIdAndUpdate(
+    req.params.partnerId,
+    {
+      $set: req.body
+    },
+    { new: true }
+  )
+    .then(partner => {
+      res.send(partner);
+    })
+    .catch(err => res.status(400).send(err));
+});
+
+router.delete("/:partnerId", (req, res) => {
+  Partner.findByIdAndDelete(req.params.partnerId)
+    .then(partner => {
+      res.send(partner);
+    })
+    .catch(err => res.status(400).send(err));
+});
+
+module.exports = router;

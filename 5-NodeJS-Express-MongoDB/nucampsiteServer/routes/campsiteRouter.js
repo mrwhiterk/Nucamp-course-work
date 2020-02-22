@@ -180,11 +180,11 @@ campsiteRouter
             })
             .catch(err => next(err));
         } else if (!campsite) {
-          err = new Error(`Campsite ${req.params.campsiteId} not found`);
+          let err = new Error(`Campsite ${req.params.campsiteId} not found`);
           err.status = 404;
           return next(err);
         } else {
-          err = new Error(`Comment ${req.params.commentId} not found`);
+          let err = new Error(`Comment ${req.params.commentId} not found`);
           err.status = 404;
           return next(err);
         }
