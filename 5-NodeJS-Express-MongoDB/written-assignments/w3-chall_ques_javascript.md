@@ -10,7 +10,7 @@ Challenge #2: Why is the professor using (' ') in the first "split"? Why is he u
 ``` So by passing ' ' to your function, you're splitting the string wherever those characters are and making array. He is capturing the array item at the second index that was created.
 
 Challenge #3: Why is the function Buffer used, what does "base64" do?
-Converting data packets from HTTP request into buffers allows it to be manipulated and parsed like other javascript data types. The 'base64' parameter tells the Buffer constructor that this data is base64 encoded so decode it for us.
+ The 'base64' parameter tells the Buffer constructor that this data is base64 encoded so decode it for us and store the result.
 
 Challenge #4: Why is .toString() used?
 .toString() method attempts to convert any non-string javascript data-type to a string. We're using it to convert our buffer object into a string.
