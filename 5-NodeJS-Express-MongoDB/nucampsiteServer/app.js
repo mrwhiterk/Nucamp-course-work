@@ -13,6 +13,7 @@ const usersRouter = require("./routes/users");
 const campsiteRouter = require("./routes/campsiteRouter");
 const partnerRouter = require("./routes/partnerRouter");
 const promotionRouter = require("./routes/promotionRouter");
+const helpers = require("./helperMethods");
 
 const mongoose = require("mongoose");
 
@@ -50,34 +51,17 @@ app.use(
   })
 );
 
+app.use("/", indexRouter);
+app.use("/users", usersRouter);
+
 // add auth
 function auth(req, res, next) {
-  console.log(req.session);
-
-  function reject() {
-    const err = new Error("You are not authenticated");
-    res.setHeader("WWW-Authenticate", "Basic");
+  if (!req.session.user) {
+    const err = new Error("You are not authenticated!");
     err.status = 401;
     return next(err);
-  }
-  if (!req.session.user) {
-    const authHeader = req.headers.authorization;
-    if (!authHeader) {
-      return reject();
-    }
-
-    const [user, pass] = Buffer.from(authHeader.split(" ")[1], "base64")
-      .toString()
-      .split(":");
-
-    if (user === "admin" && pass === "password") {
-      req.session.user = 'admin';
-      return next();
-    }
-
-    return reject();
   } else {
-    if (req.session.user === "admin") {
+    if (req.session.user === "authenticated") {
       return next();
     }
     const err = new Error("You are not authenticated");
@@ -90,8 +74,6 @@ app.use(auth);
 
 app.use(express.static(path.join(__dirname, "public")));
 
-app.use("/", indexRouter);
-app.use("/users", usersRouter);
 app.use("/campsites", campsiteRouter);
 app.use("/promotions", promotionRouter);
 app.use("/partners", partnerRouter);
