@@ -1,6 +1,7 @@
 const Partner = require("../models/partner");
 const { Router } = require("express");
 const router = Router();
+const authenticate = require("../authenticate");
 
 router.get("/", (req, res) => {
   Partner.find()
@@ -12,7 +13,7 @@ router.get("/", (req, res) => {
     });
 });
 
-router.post("/", (req, res) => {
+router.post("/", authenticate.verifyUser, (req, res) => {
   Partner.create(req.body)
     .then(partner => {
       res.send(partner);
@@ -20,12 +21,12 @@ router.post("/", (req, res) => {
     .catch(err => res.status(400).send(err));
 });
 
-router.put("/", (req, res) => {
+router.put("/", authenticate.verifyUser, (req, res) => {
   res.statusCode = 403;
   res.end("put not supported");
 });
 
-router.delete("/", (req, res) => {
+router.delete("/", authenticate.verifyUser, (req, res) => {
   Partner.deleteMany()
     .then(response => {
       res.send(response);
@@ -41,13 +42,13 @@ router.get("/:partnerId", (req, res) => {
     .catch(err => res.status(400).send(err));
 });
 
-router.post("/:partnerId", (req, res) => {
+router.post("/:partnerId", authenticate.verifyUser, (req, res) => {
   res
     .status(403)
     .send(`POST operation not supported on /partners/${req.params.partnerId}`);
 });
 
-router.put("/:partnerId", (req, res) => {
+router.put("/:partnerId", authenticate.verifyUser, (req, res) => {
   Partner.findByIdAndUpdate(
     req.params.partnerId,
     {
@@ -61,7 +62,7 @@ router.put("/:partnerId", (req, res) => {
     .catch(err => res.status(400).send(err));
 });
 
-router.delete("/:partnerId", (req, res) => {
+router.delete("/:partnerId", authenticate.verifyUser, (req, res) => {
   Partner.findByIdAndDelete(req.params.partnerId)
     .then(partner => {
       res.send(partner);

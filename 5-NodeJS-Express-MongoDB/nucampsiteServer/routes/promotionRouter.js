@@ -1,6 +1,7 @@
 const Promotion = require("../models/promotion");
 const express = require("express");
 const router = express.Router();
+const authenticate = require("../authenticate");
 
 router.get("/", (req, res) => {
   Promotion.find()
@@ -12,7 +13,7 @@ router.get("/", (req, res) => {
     });
 });
 
-router.post("/", (req, res) => {
+router.post("/", authenticate.verifyUser, (req, res) => {
   Promotion.create(req.body)
     .then(promotion => {
       res.send(promotion);
@@ -20,11 +21,11 @@ router.post("/", (req, res) => {
     .catch(err => res.status(400).send(err));
 });
 
-router.put("/", (req, res) => {
+router.put("/", authenticate.verifyUser, (req, res) => {
   res.status(403).send("Put not supported");
 });
 
-router.delete("/", (req, res) => {
+router.delete("/", authenticate.verifyUser, (req, res) => {
   Promotion.deleteMany()
     .then(response => {
       res.send(response);
@@ -41,7 +42,7 @@ router.get("/:promotionId", (req, res) => {
   });
 });
 
-router.post("/:promotionId", (req, res) => {
+router.post("/:promotionId", authenticate.verifyUser, (req, res) => {
   res
     .status(403)
     .send(
@@ -49,7 +50,7 @@ router.post("/:promotionId", (req, res) => {
     );
 });
 
-router.put("/:promotionId", (req, res) => {
+router.put("/:promotionId", authenticate.verifyUser, (req, res) => {
   Promotion.findByIdAndUpdate(
     req.params.promotionId,
     {
@@ -63,7 +64,7 @@ router.put("/:promotionId", (req, res) => {
     .catch(err => res.status(400).send(err));
 });
 
-router.delete("/:promotionId", (req, res) => {
+router.delete("/:promotionId", authenticate.verifyUser, (req, res) => {
   Promotion.findByIdAndDelete(req.params.promotionId)
     .then(promotion => {
       res.send(promotion);
