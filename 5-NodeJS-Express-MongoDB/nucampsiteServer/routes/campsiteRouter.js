@@ -185,7 +185,8 @@ campsiteRouter
           if (
             !campsite.comments
               .id(req.params.commentId)
-              .author.equals(req.user._id)
+              .author.equals(req.user._id) ||
+            !req.user.admin
           ) {
             return res.status(403).send("You are not authorized to edit");
           }
@@ -225,7 +226,8 @@ campsiteRouter
             if (
               !campsite.comments
                 .id(req.params.commentId)
-                .author.equals(req.user._id)
+                .author.equals(req.user._id) ||
+              !req.user.admin
             ) {
               return res.status(403).send("You are not authorized to delete");
             }
