@@ -13,25 +13,35 @@ router.get("/", (req, res) => {
     });
 });
 
-router.post("/", authenticate.verifyUser, (req, res) => {
-  Promotion.create(req.body)
-    .then(promotion => {
-      res.send(promotion);
-    })
-    .catch(err => res.status(400).send(err));
-});
+router.post(
+  "/",
+  authenticate.verifyUser,
+  authenticate.verifyAdmin,
+  (req, res) => {
+    Promotion.create(req.body)
+      .then(promotion => {
+        res.send(promotion);
+      })
+      .catch(err => res.status(400).send(err));
+  }
+);
 
 router.put("/", authenticate.verifyUser, (req, res) => {
   res.status(403).send("Put not supported");
 });
 
-router.delete("/", authenticate.verifyUser, (req, res) => {
-  Promotion.deleteMany()
-    .then(response => {
-      res.send(response);
-    })
-    .catch(err => res.status(400).send(err));
-});
+router.delete(
+  "/",
+  authenticate.verifyUser,
+  authenticate.verifyAdmin,
+  (req, res) => {
+    Promotion.deleteMany()
+      .then(response => {
+        res.send(response);
+      })
+      .catch(err => res.status(400).send(err));
+  }
+);
 
 router.get("/:promotionId", (req, res) => {
   Promotion.findById(req.params.promotionId, (err, promotion) => {
@@ -42,34 +52,49 @@ router.get("/:promotionId", (req, res) => {
   });
 });
 
-router.post("/:promotionId", authenticate.verifyUser, (req, res) => {
-  res
-    .status(403)
-    .send(
-      `POST operation not supported on /promotions/${req.params.promotionId}`
-    );
-});
+router.post(
+  "/:promotionId",
+  authenticate.verifyUser,
 
-router.put("/:promotionId", authenticate.verifyUser, (req, res) => {
-  Promotion.findByIdAndUpdate(
-    req.params.promotionId,
-    {
-      $set: req.body
-    },
-    { new: true }
-  )
-    .then(promotion => {
-      res.send(promotion);
-    })
-    .catch(err => res.status(400).send(err));
-});
+  (req, res) => {
+    res
+      .status(403)
+      .send(
+        `POST operation not supported on /promotions/${req.params.promotionId}`
+      );
+  }
+);
 
-router.delete("/:promotionId", authenticate.verifyUser, (req, res) => {
-  Promotion.findByIdAndDelete(req.params.promotionId)
-    .then(promotion => {
-      res.send(promotion);
-    })
-    .catch(err => res.status(400).send(err));
-});
+router.put(
+  "/:promotionId",
+  authenticate.verifyUser,
+  authenticate.verifyAdmin,
+  (req, res) => {
+    Promotion.findByIdAndUpdate(
+      req.params.promotionId,
+      {
+        $set: req.body
+      },
+      { new: true }
+    )
+      .then(promotion => {
+        res.send(promotion);
+      })
+      .catch(err => res.status(400).send(err));
+  }
+);
+
+router.delete(
+  "/:promotionId",
+  authenticate.verifyUser,
+  authenticate.verifyAdmin,
+  (req, res) => {
+    Promotion.findByIdAndDelete(req.params.promotionId)
+      .then(promotion => {
+        res.send(promotion);
+      })
+      .catch(err => res.status(400).send(err));
+  }
+);
 
 module.exports = router;
