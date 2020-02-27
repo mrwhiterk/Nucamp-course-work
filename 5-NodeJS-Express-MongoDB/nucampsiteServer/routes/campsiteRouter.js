@@ -93,7 +93,7 @@ campsiteRouter
       })
       .catch(err => next(err));
   })
-  .post(authenticate.verifyUser, authenticate.verifyAdmin, (req, res, next) => {
+  .post(authenticate.verifyUser, (req, res, next) => {
     Campsite.findById(req.params.campsiteId)
       .then(campsite => {
         if (campsite) {
@@ -171,7 +171,7 @@ campsiteRouter
       })
       .catch(err => next(err));
   })
-  .post(authenticate.verifyUser, authenticate.verifyAdmin, (req, res) => {
+  .post(authenticate.verifyUser, (req, res) => {
     res
       .status(403)
       .send(
@@ -182,6 +182,13 @@ campsiteRouter
     Campsite.findById(req.params.campsiteId)
       .then(campsite => {
         if (campsite && campsite.comments.id(req.params.commentId)) {
+          if (
+            !campsite.comments
+              .id(req.params.commentId)
+              .author.equals(req.user._id)
+          ) {
+            return res.status(403).send("You are not authorized to edit");
+          }
           if (req.body.rating) {
             campsite.comments.id(req.params.commentId).rating = req.body.rating;
           }
@@ -215,6 +222,13 @@ campsiteRouter
       Campsite.findById(req.params.campsiteId)
         .then(campsite => {
           if (campsite && campsite.comments.id(req.params.commentId)) {
+            if (
+              !campsite.comments
+                .id(req.params.commentId)
+                .author.equals(req.user._id)
+            ) {
+              return res.status(403).send("You are not authorized to delete");
+            }
             campsite.comments.pull(req.params.commentId);
 
             campsite
