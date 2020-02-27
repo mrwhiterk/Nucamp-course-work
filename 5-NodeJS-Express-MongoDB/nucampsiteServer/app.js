@@ -4,20 +4,18 @@ const createError = require("http-errors");
 const express = require("express");
 const path = require("path");
 const logger = require("morgan");
-const passport = require("passport");
+const mongoose = require("mongoose");
 const config = require("./config");
+const passport = require("passport");
+const app = express();
 
 const indexRouter = require("./routes/index");
 const usersRouter = require("./routes/users");
 const campsiteRouter = require("./routes/campsiteRouter");
 const partnerRouter = require("./routes/partnerRouter");
 const promotionRouter = require("./routes/promotionRouter");
-const helpers = require("./helperMethods");
-
-const mongoose = require("mongoose");
 
 const url = config.mongoUrl;
-
 const connect = mongoose.connect(url, {
   useCreateIndex: true,
   useFindAndModify: false,
@@ -28,8 +26,6 @@ const connect = mongoose.connect(url, {
 connect.then(() => {
   console.log("Connected correctly to server"), err => console.log(err);
 });
-
-const app = express();
 
 // view engine setup
 app.set("views", path.join(__dirname, "views"));

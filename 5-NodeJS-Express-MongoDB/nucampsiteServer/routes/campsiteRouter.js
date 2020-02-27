@@ -7,6 +7,7 @@ campsiteRouter
   .route("/")
   .get((req, res, next) => {
     Campsite.find()
+      .populate("comments.author")
       .then(campsites => {
         res.json(campsites);
       })
@@ -35,6 +36,7 @@ campsiteRouter
   .route("/:campsiteId")
   .get((req, res, next) => {
     Campsite.findById(req.params.campsiteId)
+      .populate("comments.author")
       .then(campsite => {
         res.send(campsite);
       })
@@ -71,6 +73,7 @@ campsiteRouter
   .route("/:campsiteId/comments")
   .get((req, res, next) => {
     Campsite.findById(req.params.campsiteId)
+      .populate("comments.author")
       .then(campsite => {
         if (campsite) {
           res.send(campsite.comments);
@@ -86,7 +89,7 @@ campsiteRouter
     Campsite.findById(req.params.campsiteId)
       .then(campsite => {
         if (campsite) {
-          campsite.comments.push(req.body);
+          campsite.comments.push({ ...req.body, author: req.user._id });
           campsite
             .save()
             .then(campsite => {
@@ -140,6 +143,7 @@ campsiteRouter
   .route("/:campsiteId/comments/:commentId")
   .get((req, res, next) => {
     Campsite.findById(req.params.campsiteId)
+      .populate("comments.author")
       .then(campsite => {
         if (campsite && campsite.comments.id(req.params.commentId)) {
           res.send(campsite.comments.id(req.params.commentId));
