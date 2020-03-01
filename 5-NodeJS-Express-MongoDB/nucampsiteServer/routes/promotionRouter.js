@@ -2,8 +2,13 @@ const Promotion = require("../models/promotion");
 const express = require("express");
 const router = express.Router();
 const authenticate = require("../authenticate");
+const cors = require("./cors");
 
-router.get("/", (req, res) => {
+router.options(cors.corsWithOptions, (req, res) => {
+  res.sendStatus(200);
+});
+
+router.get("/", cors.cors, (req, res) => {
   Promotion.find()
     .then(promotions => {
       res.send(promotions);
@@ -15,6 +20,7 @@ router.get("/", (req, res) => {
 
 router.post(
   "/",
+  cors.corsWithOptions,
   authenticate.verifyUser,
   authenticate.verifyAdmin,
   (req, res) => {
@@ -26,12 +32,19 @@ router.post(
   }
 );
 
-router.put("/", authenticate.verifyUser, (req, res) => {
-  res.status(403).send("Put not supported");
-});
+router.put(
+  "/",
+  cors.corsWithOptions,
+  authenticate.verifyUser,
+  authenticate.verifyAdmin,
+  (req, res) => {
+    res.status(403).send("Put not supported");
+  }
+);
 
 router.delete(
   "/",
+  cors.corsWithOptions,
   authenticate.verifyUser,
   authenticate.verifyAdmin,
   (req, res) => {
@@ -43,7 +56,7 @@ router.delete(
   }
 );
 
-router.get("/:promotionId", (req, res) => {
+router.get("/:promotionId", cors.cors, (req, res) => {
   Promotion.findById(req.params.promotionId, (err, promotion) => {
     if (err) {
       res.status(400).send(err);
@@ -54,8 +67,9 @@ router.get("/:promotionId", (req, res) => {
 
 router.post(
   "/:promotionId",
+  cors.corsWithOptions,
   authenticate.verifyUser,
-
+  authenticate.verifyAdmin,
   (req, res) => {
     res
       .status(403)
@@ -67,6 +81,7 @@ router.post(
 
 router.put(
   "/:promotionId",
+  cors.corsWithOptions,
   authenticate.verifyUser,
   authenticate.verifyAdmin,
   (req, res) => {
@@ -86,6 +101,7 @@ router.put(
 
 router.delete(
   "/:promotionId",
+  cors.corsWithOptions,
   authenticate.verifyUser,
   authenticate.verifyAdmin,
   (req, res) => {

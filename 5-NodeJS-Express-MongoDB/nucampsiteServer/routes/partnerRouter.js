@@ -1,9 +1,14 @@
-const Partner = require("../models/partner");
 const { Router } = require("express");
-const router = Router();
+const Partner = require("../models/partner");
 const authenticate = require("../authenticate");
+const cors = require("./cors");
+const router = Router();
 
-router.get("/", (req, res) => {
+router.options(cors.corsWithOptions, (req, res) => {
+  res.sendStatus(200);
+});
+
+router.get("/", cors.cors, (req, res) => {
   Partner.find()
     .then(partners => {
       res.send(partners);
@@ -15,6 +20,7 @@ router.get("/", (req, res) => {
 
 router.post(
   "/",
+  cors.corsWithOptions,
   authenticate.verifyUser,
   authenticate.verifyAdmin,
   (req, res) => {
@@ -26,13 +32,20 @@ router.post(
   }
 );
 
-router.put("/", authenticate.verifyUser, (req, res) => {
-  res.statusCode = 403;
-  res.end("put not supported");
-});
+router.put(
+  "/",
+  cors.corsWithOptions,
+  authenticate.verifyUser,
+  authenticate.verifyAdmin,
+  (req, res) => {
+    res.statusCode = 403;
+    res.end("put not supported");
+  }
+);
 
 router.delete(
   "/",
+  cors.corsWithOptions,
   authenticate.verifyUser,
   authenticate.verifyAdmin,
   (req, res) => {
@@ -44,7 +57,7 @@ router.delete(
   }
 );
 
-router.get("/:partnerId", (req, res) => {
+router.get("/:partnerId", cors.cors, (req, res) => {
   Partner.findById(req.params.partnerId)
     .then(partner => {
       res.send(partner);
@@ -54,8 +67,9 @@ router.get("/:partnerId", (req, res) => {
 
 router.post(
   "/:partnerId",
+  cors.corsWithOptions,
   authenticate.verifyUser,
-
+  authenticate.verifyAdmin,
   (req, res) => {
     res
       .status(403)
@@ -67,6 +81,7 @@ router.post(
 
 router.put(
   "/:partnerId",
+  cors.corsWithOptions,
   authenticate.verifyUser,
   authenticate.verifyAdmin,
   (req, res) => {
@@ -86,6 +101,7 @@ router.put(
 
 router.delete(
   "/:partnerId",
+  cors.corsWithOptions,
   authenticate.verifyUser,
   authenticate.verifyAdmin,
   (req, res) => {
