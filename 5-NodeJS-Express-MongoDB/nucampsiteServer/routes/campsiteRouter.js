@@ -1,5 +1,6 @@
 const express = require("express");
 const Campsite = require("../models/campsite");
+const Campsite = require("/Users/mrwhiterk/dev/nucamp/Nucamp-course-work/5-NodeJS-Express-MongoDB/nucampsiteServer/models/campsite");
 const authenticate = require("../authenticate");
 const cors = require("./cors");
 const campsiteRouter = express.Router();
@@ -12,10 +13,10 @@ campsiteRouter
   .get(cors.cors, (req, res, next) => {
     Campsite.find()
       .populate("comments.author")
-      .then(campsites => {
+      .then((campsites) => {
         res.json(campsites);
       })
-      .catch(err => next(err));
+      .catch((err) => next(err));
   })
   .post(
     cors.corsWithOptions,
@@ -23,10 +24,10 @@ campsiteRouter
     authenticate.verifyAdmin,
     (req, res, next) => {
       Campsite.create(req.body)
-        .then(campsite => {
+        .then((campsite) => {
           res.json(campsite);
         })
-        .catch(err => next(err));
+        .catch((err) => next(err));
     }
   )
   .put(
@@ -44,10 +45,10 @@ campsiteRouter
     authenticate.verifyAdmin,
     (req, res, next) => {
       Campsite.deleteMany()
-        .then(response => {
+        .then((response) => {
           res.send(response);
         })
-        .catch(err => next(err));
+        .catch((err) => next(err));
     }
   );
 
@@ -59,10 +60,10 @@ campsiteRouter
   .get(cors.cors, (req, res, next) => {
     Campsite.findById(req.params.campsiteId)
       .populate("comments.author")
-      .then(campsite => {
+      .then((campsite) => {
         res.send(campsite);
       })
-      .catch(err => next(err));
+      .catch((err) => next(err));
   })
   .post(
     cors.corsWithOptions,
@@ -83,14 +84,14 @@ campsiteRouter
       Campsite.findByIdAndUpdate(
         req.params.campsiteId,
         {
-          $set: req.body
+          $set: req.body,
         },
         { new: true }
       )
-        .then(campsite => {
+        .then((campsite) => {
           res.send(campsite);
         })
-        .catch(err => next(err));
+        .catch((err) => next(err));
     }
   )
   .delete(
@@ -99,10 +100,10 @@ campsiteRouter
     authenticate.verifyAdmin,
     (req, res, next) => {
       Campsite.findByIdAndDelete(req.params.campsiteId)
-        .then(campsite => {
+        .then((campsite) => {
           res.send(campsite);
         })
-        .catch(err => next(err));
+        .catch((err) => next(err));
     }
   );
 
@@ -114,7 +115,7 @@ campsiteRouter
   .get(cors.cors, (req, res, next) => {
     Campsite.findById(req.params.campsiteId)
       .populate("comments.author")
-      .then(campsite => {
+      .then((campsite) => {
         if (campsite) {
           res.send(campsite.comments);
         } else {
@@ -123,19 +124,19 @@ campsiteRouter
           return next(err);
         }
       })
-      .catch(err => next(err));
+      .catch((err) => next(err));
   })
   .post(cors.corsWithOptions, authenticate.verifyUser, (req, res, next) => {
     Campsite.findById(req.params.campsiteId)
-      .then(campsite => {
+      .then((campsite) => {
         if (campsite) {
           campsite.comments.push({ ...req.body, author: req.user._id });
           campsite
             .save()
-            .then(campsite => {
+            .then((campsite) => {
               res.send(campsite);
             })
-            .catch(err => {
+            .catch((err) => {
               next(err);
             });
         } else {
@@ -144,7 +145,7 @@ campsiteRouter
           return next(err);
         }
       })
-      .catch(err => next(err));
+      .catch((err) => next(err));
   })
   .put(
     cors.corsWithOptions,
@@ -163,7 +164,7 @@ campsiteRouter
     authenticate.verifyAdmin,
     (req, res, next) => {
       Campsite.findById(req.params.campsiteId)
-        .then(campsite => {
+        .then((campsite) => {
           if (campsite) {
             // campsite.comments.push(req.body);
             // for (let i = campsite.comments.length - 1; i >= 0; i--) {
@@ -173,10 +174,10 @@ campsiteRouter
 
             campsite
               .save()
-              .then(campsite => {
+              .then((campsite) => {
                 res.send(campsite);
               })
-              .catch(err => {
+              .catch((err) => {
                 next(err);
               });
           } else {
@@ -185,7 +186,7 @@ campsiteRouter
             return next(err);
           }
         })
-        .catch(err => next(err));
+        .catch((err) => next(err));
     }
   );
 
@@ -197,7 +198,7 @@ campsiteRouter
   .get((req, res, next) => {
     Campsite.findById(req.params.campsiteId)
       .populate("comments.author")
-      .then(campsite => {
+      .then((campsite) => {
         if (campsite && campsite.comments.id(req.params.commentId)) {
           res.send(campsite.comments.id(req.params.commentId));
         } else if (!campsite) {
@@ -210,7 +211,7 @@ campsiteRouter
           return next(err);
         }
       })
-      .catch(err => next(err));
+      .catch((err) => next(err));
   })
   .post(
     cors.corsWithOptions,
@@ -226,7 +227,7 @@ campsiteRouter
   )
   .put(cors.corsWithOptions, authenticate.verifyUser, (req, res, next) => {
     Campsite.findById(req.params.campsiteId)
-      .then(campsite => {
+      .then((campsite) => {
         if (campsite && campsite.comments.id(req.params.commentId)) {
           if (
             !campsite.comments
@@ -246,10 +247,10 @@ campsiteRouter
 
           campsite
             .save()
-            .then(campsite => {
+            .then((campsite) => {
               res.send(campsite);
             })
-            .catch(err => next(err));
+            .catch((err) => next(err));
         } else if (!campsite) {
           let err = new Error(`Campsite ${req.params.campsiteId} not found`);
           err.status = 404;
@@ -260,11 +261,11 @@ campsiteRouter
           return next(err);
         }
       })
-      .catch(err => next(err));
+      .catch((err) => next(err));
   })
   .delete(cors.corsWithOptions, authenticate.verifyUser, (req, res, next) => {
     Campsite.findById(req.params.campsiteId)
-      .then(campsite => {
+      .then((campsite) => {
         if (campsite && campsite.comments.id(req.params.commentId)) {
           if (
             !campsite.comments
@@ -278,10 +279,10 @@ campsiteRouter
 
           campsite
             .save()
-            .then(campsite => {
+            .then((campsite) => {
               res.send(campsite);
             })
-            .catch(err => next(err));
+            .catch((err) => next(err));
         } else if (!campsite) {
           err = new Error(`Campsite ${req.params.campsiteId} not found`);
           err.status = 404;
@@ -292,7 +293,7 @@ campsiteRouter
           return next(err);
         }
       })
-      .catch(err => next(err));
+      .catch((err) => next(err));
   });
 
 module.exports = campsiteRouter;
