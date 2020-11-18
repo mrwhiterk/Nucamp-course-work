@@ -1,10 +1,16 @@
 import React, { Component } from "react";
 import { Navbar, NavbarBrand } from "reactstrap";
 import "./App.css";
+import { CAMPSITES } from "./shared/campsites"
 
 import Directory from "./components/DirectoryComponent";
 
 class App extends Component {
+  state = {
+    campsites: CAMPSITES
+  }
+  
+
   render() {
     return (
       <div className="App">
@@ -13,7 +19,7 @@ class App extends Component {
             <NavbarBrand href="/">NuCamp</NavbarBrand>
           </div>
         </Navbar>
-        <Directory />
+        <Directory campsites={this.state.campsites} />
       </div>
     );
   }
