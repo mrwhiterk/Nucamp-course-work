@@ -14,7 +14,7 @@ class Bootcamp {
   }
 
   registerStudent(student) {
-    console.log(this.students);
+    
     if (this.students.some((x) => x.email == student.email)) {
       console.log(
         `Student with ${student.email} already registered to bootcamp ${this.name}.`
