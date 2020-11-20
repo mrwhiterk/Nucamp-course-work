@@ -10,7 +10,7 @@ export const CAMPSITES = [
       {
         id: 0,
         rating: 5,
-        text: "What a magnificent view!",
+        text: "What a magnificent view! 1",
         author: "Tinus Lorvaldes",
         date: "2018-10-25T16:30Z",
       },
@@ -56,7 +56,7 @@ export const CAMPSITES = [
       {
         id: 0,
         rating: 5,
-        text: "What a magnificent view!",
+        text: "What a magnificent view! 2",
         author: "Tinus Lorvaldes",
         date: "2018-10-25T16:30Z",
       },
@@ -102,7 +102,7 @@ export const CAMPSITES = [
       {
         id: 0,
         rating: 5,
-        text: "What a magnificent view!",
+        text: "What a magnificent view! 3",
         author: "Tinus Lorvaldes",
         date: "2018-10-25T16:30Z",
       },
@@ -139,7 +139,7 @@ export const CAMPSITES = [
   },
   {
     id: 3,
-    name: "Redux Woods Campground",
+    name: "Redux Woods Campground 4",
     image: "assets/images/redux-woods.jpg",
     elevation: 42,
     description:
@@ -148,7 +148,7 @@ export const CAMPSITES = [
       {
         id: 0,
         rating: 5,
-        text: "What a magnificent view!",
+        text: "What a magnificent view! 4",
         author: "Tinus Lorvaldes",
         date: "2018-10-25T16:30Z",
       },
