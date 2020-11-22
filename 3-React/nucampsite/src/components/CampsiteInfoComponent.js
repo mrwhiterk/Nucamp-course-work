@@ -14,9 +14,9 @@ export default class CampsiteInfo extends Component {
       return (
         <div className="col-md-5 m-1">
           <h4>Comments</h4>
-          {comments.map((comment, idx) => {
+          {comments.map((comment) => {
             return (
-              <div key={idx} className="mb-1">
+              <div key={comment.id} className="mb-1">
                 {comment.text}
                 <figcaption class="figure-caption">
                   --{comment.author}{" "}
@@ -50,7 +50,6 @@ export default class CampsiteInfo extends Component {
 
   render() {
     if (this.props.campsite) {
-      console.log(this.props.campsite);
       return (
         <div className="row">
           {this.renderCampsite(this.props.campsite)}{" "}
