@@ -32,10 +32,8 @@ class Header extends Component {
       <>
         <Jumbotron fluid>
           <div className="container">
-            <div className="row">
-              <h1>Nucamp</h1>
-              <h2>a better way to camp</h2>
-            </div>
+            <h1>Nucamp</h1>
+            <h2>a better way to camp</h2>
           </div>
         </Jumbotron>
         <Navbar dark sticky="top" expand="md">
