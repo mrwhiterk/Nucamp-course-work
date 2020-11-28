@@ -20,8 +20,12 @@ class Main extends Component {
     comments: COMMENTS,
   };
 
+  //This function will add a campsite and be passed all the way to addCommentForm component
+  //Note: this function needs to be a arrow function so we can inherit "this" from parent, so we can reach props. 
+  //Normally "this" would be the addCommentForm that's actually calling this function.
   addComment = (commentData) => {
     let newComment = {
+      //id will be 1 plus the last item index which only works cause index and ids match in our data.
       id: this.state.comments.length,
       campsiteId: commentData.campsiteId,
       rating: 0,
@@ -29,6 +33,7 @@ class Main extends Component {
       author: commentData.author,
       date: new Date(),
     };
+    // comments now equal the result of adding newComment to state comments (concat doesn't mutate this.state). Return a new copy and replaces
     this.setState({ comments: this.state.comments.concat(newComment) });
   };
 
@@ -47,10 +52,11 @@ class Main extends Component {
       );
     };
 
+    //inject addComment function as prop
     const CampsiteWithId = ({ match }) => {
       return (
         <CampsiteInfo
-        addComment={this.addComment}
+          addComment={this.addComment}
           campsite={
             this.state.campsites.filter(
               (campsite) => campsite.id === +match.params.campsiteId

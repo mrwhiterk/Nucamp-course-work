@@ -24,7 +24,7 @@ function RenderCampsite({ campsite }) {
     </div>
   );
 }
-
+// now we need campsite to get the id of the current campsite and we need addComment to pass down to our form on line 48
 function RenderComments({ comments, addComment, campsite }) {
   if (comments) {
     return (
@@ -53,6 +53,7 @@ function RenderComments({ comments, addComment, campsite }) {
   } else return <div />;
 }
 
+//I destructure addComment as well from props. In render comments im passing down campsite and addComment to be used by function
 function CampsiteInfo({campsite, comments, addComment}) {
   if (campsite) {
     return (

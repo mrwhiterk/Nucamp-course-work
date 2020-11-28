@@ -9,17 +9,21 @@ export default class AddCommentForm extends Component {
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
+  //set whatever name of input as the key and value attribute as value. Note: we need the [] do interpreter knows to evaluate whole expression before setting key.
   handleChange(e) {
     this.setState({ [e.target.name]: e.target.value });
   }
 
   handleSubmit(event) {
+    //stop page from reloading
     event.preventDefault();
+
     let payload = {
       text: this.state.text,
       author: this.state.author,
       campsiteId: this.props.campsite.id,
     };
+    //call the function passed from mainComponent
     this.props.addComment(payload);
   }
 
