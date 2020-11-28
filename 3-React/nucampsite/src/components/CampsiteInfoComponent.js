@@ -8,6 +8,7 @@ import {
   Breadcrumb,
   BreadcrumbItem,
 } from "reactstrap";
+import AddCommentForm from "./AddCommentForm";
 
 import { Link } from "react-router-dom";
 
@@ -24,7 +25,7 @@ function RenderCampsite({ campsite }) {
   );
 }
 
-function RenderComments({ comments }) {
+function RenderComments({ comments, addComment, campsite }) {
   if (comments) {
     return (
       <div className="col-md-5 m-1">
@@ -44,13 +45,16 @@ function RenderComments({ comments }) {
             </div>
           );
         })}
+        <AddCommentForm addComment={addComment} campsite={campsite}/>
+
+        
       </div>
     );
   } else return <div />;
 }
 
-function CampsiteInfo(props) {
-  if (props.campsite) {
+function CampsiteInfo({campsite, comments, addComment}) {
+  if (campsite) {
     return (
       <div className="container">
         <div className="row">
@@ -60,15 +64,15 @@ function CampsiteInfo(props) {
                 {" "}
                 <Link to="/directory">Directory</Link>{" "}
               </BreadcrumbItem>
-              <BreadcrumbItem active>{props.campsite.name}</BreadcrumbItem>
+              <BreadcrumbItem active>{campsite.name}</BreadcrumbItem>
             </Breadcrumb>
-            <h2>{props.campsite.name}</h2>
+            <h2>{campsite.name}</h2>
             <hr />
           </div>
         </div>
         <div className="row">
-          <RenderCampsite campsite={props.campsite} />
-          <RenderComments comments={props.comments} />
+          <RenderCampsite campsite={campsite} />
+          <RenderComments campsite={campsite} comments={comments} addComment={addComment} />
         </div>
       </div>
     );

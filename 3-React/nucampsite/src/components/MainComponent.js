@@ -20,6 +20,18 @@ class Main extends Component {
     comments: COMMENTS,
   };
 
+  addComment = (commentData) => {
+    let newComment = {
+      id: this.state.comments.length,
+      campsiteId: commentData.campsiteId,
+      rating: 0,
+      text: commentData.text,
+      author: commentData.author,
+      date: new Date(),
+    };
+    this.setState({ comments: this.state.comments.concat(newComment) });
+  };
+
   render() {
     const HomePage = () => {
       return (
@@ -38,6 +50,7 @@ class Main extends Component {
     const CampsiteWithId = ({ match }) => {
       return (
         <CampsiteInfo
+        addComment={this.addComment}
           campsite={
             this.state.campsites.filter(
               (campsite) => campsite.id === +match.params.campsiteId
