@@ -46,7 +46,6 @@ class Header extends Component {
                 alt="NuCamp Logo"
               />
             </NavbarBrand>
-            {console.log(NavbarToggler)}
             <NavbarToggler onClick={this.toggleNav} />
             <Collapse isOpen={this.state.isNavOpen} navbar>
               <Nav navbar>
