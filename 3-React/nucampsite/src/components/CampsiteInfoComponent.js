@@ -19,16 +19,24 @@ import { Control, LocalForm, Errors } from "react-redux-form";
 import Loading from "./LoadingComponent";
 import { baseUrl } from "../shared/baseUrl";
 import { Link } from "react-router-dom";
+import { FadeTransform, Fade, Stagger } from "react-animation-components";
 
 function RenderCampsite({ campsite }) {
   return (
     <div className="col-md-5 m-1">
-      <Card>
-        <CardImg top src={baseUrl + campsite.image} alt={campsite.name} />
-        <CardBody>
-          <CardText>{campsite.description}</CardText>
-        </CardBody>
-      </Card>
+      <FadeTransform
+        in
+        transformProps={{
+          exitTransform: "scale(0.5) translate(-50%)",
+        }}
+      >
+        <Card>
+          <CardImg top src={baseUrl + campsite.image} alt={campsite.name} />
+          <CardBody>
+            <CardText>{campsite.description}</CardText>
+          </CardBody>
+        </Card>
+      </FadeTransform>
     </div>
   );
 }
@@ -38,22 +46,25 @@ function RenderComments({ comments, postComment, campsiteId }) {
     return (
       <div className="col-md-5 m-1">
         <h4>Comments</h4>
-        {comments.map((comment) => {
-          console.log(comment.date);
-          return (
-            <div key={comment.id} className="mb-1">
-              {comment.text}
-              <figcaption className="figure-caption">
-                --{comment.author}{" "}
-                {new Intl.DateTimeFormat("en-US", {
-                  year: "numeric",
-                  month: "short",
-                  day: "2-digit",
-                }).format(new Date(Date.parse(comment.date)))}{" "}
-              </figcaption>
-            </div>
-          );
-        })}
+        <Stagger in>
+          {comments.map((comment) => {
+            return (
+              <Fade in key={comment.id}>
+                <div className="mb-1">
+                  {comment.text}
+                  <figcaption className="figure-caption">
+                    --{comment.author}{" "}
+                    {new Intl.DateTimeFormat("en-US", {
+                      year: "numeric",
+                      month: "short",
+                      day: "2-digit",
+                    }).format(new Date(Date.parse(comment.date)))}{" "}
+                  </figcaption>
+                </div>
+              </Fade>
+            );
+          })}
+        </Stagger>
         <CommentForm campsiteId={campsiteId} postComment={postComment} />
       </div>
     );
@@ -177,7 +188,7 @@ class CommentForm extends React.Component {
   }
 }
 
-//I destructure postComment as well from props. In render comments im passing down campsite and postComment to be used by function
+//I destructed postComment as well from props. In render comments im passing down campsite and postComment to be used by function
 function CampsiteInfo({
   campsite,
   comments,
