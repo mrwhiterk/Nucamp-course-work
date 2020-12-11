@@ -17,14 +17,14 @@ import {
 } from "reactstrap";
 import { Control, LocalForm, Errors } from "react-redux-form";
 import Loading from "./LoadingComponent";
-
+import { baseUrl } from "../shared/baseUrl";
 import { Link } from "react-router-dom";
 
 function RenderCampsite({ campsite }) {
   return (
     <div className="col-md-5 m-1">
       <Card>
-        <CardImg top src={campsite.image} alt={campsite.name} />
+        <CardImg top src={baseUrl + campsite.image} alt={campsite.name} />
         <CardBody>
           <CardText>{campsite.description}</CardText>
         </CardBody>
@@ -178,7 +178,13 @@ class CommentForm extends React.Component {
 }
 
 //I destructure addComment as well from props. In render comments im passing down campsite and addComment to be used by function
-function CampsiteInfo({ campsite, comments, addComment, campsitesLoading, campsitesErrMess }) {
+function CampsiteInfo({
+  campsite,
+  comments,
+  addComment,
+  campsitesLoading,
+  campsitesErrMess,
+}) {
   if (campsitesLoading) {
     return (
       <div className="container">
