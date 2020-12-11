@@ -70,8 +70,8 @@ class CommentForm extends React.Component {
     text: "",
     author: "",
     touched: {
-      author: false
-    }
+      author: false,
+    },
   };
 
   toggleModal = () => {
@@ -81,7 +81,6 @@ class CommentForm extends React.Component {
   };
 
   handleSubmit = (values) => {
-    let { rating, author, text } = values;
     console.log(`Current State is: ${JSON.stringify(values)}`);
     alert(`Current State is: ${JSON.stringify(values)}`);
     this.toggleModal();
@@ -159,8 +158,8 @@ class CommentForm extends React.Component {
   render() {
     return (
       <>
-        <Button outline className="fa fa-lg" onClick={this.toggleModal}>
-          <i className="fa fa-pencil" />
+        <Button outline onClick={this.toggleModal}>
+          <i className="fa fa-pencil fa-lg" />
           Submit Comment
         </Button>
         <Modal isOpen={this.state.isModalOpen} toggle={this.toggleModal}>
