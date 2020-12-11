@@ -32,12 +32,14 @@ function RenderCampsite({ campsite }) {
   );
 }
 // now we need campsite to get the id of the current campsite and we need addComment to pass down to our form on line 48
-function RenderComments({ comments, campsite }) {
+function RenderComments({ comments, addComment, campsiteId }) {
   if (comments) {
+    
     return (
       <div className="col-md-5 m-1">
         <h4>Comments</h4>
         {comments.map((comment) => {
+          console.log(comment.date);
           return (
             <div key={comment.id} className="mb-1">
               {comment.text}
@@ -52,7 +54,7 @@ function RenderComments({ comments, campsite }) {
             </div>
           );
         })}
-        <CommentForm />
+        <CommentForm campsiteId={campsiteId} addComment={addComment} />
       </div>
     );
   } else return <div />;
@@ -81,9 +83,13 @@ class CommentForm extends React.Component {
   };
 
   handleSubmit = (values) => {
-    console.log(`Current State is: ${JSON.stringify(values)}`);
-    alert(`Current State is: ${JSON.stringify(values)}`);
     this.toggleModal();
+    this.props.addComment(
+      this.props.campsiteId,
+      values.rating,
+      values.author,
+      values.text
+    );
   };
 
   renderReduxForm = () => {
@@ -172,7 +178,7 @@ class CommentForm extends React.Component {
 }
 
 //I destructure addComment as well from props. In render comments im passing down campsite and addComment to be used by function
-function CampsiteInfo({ campsite, comments }) {
+function CampsiteInfo({ campsite, comments, addComment }) {
   if (campsite) {
     return (
       <div className="container">
@@ -191,7 +197,11 @@ function CampsiteInfo({ campsite, comments }) {
         </div>
         <div className="row">
           <RenderCampsite campsite={campsite} />
-          <RenderComments campsite={campsite} comments={comments} />
+          <RenderComments
+            addComment={addComment}
+            comments={comments}
+            campsiteId={campsite.id}
+          />
         </div>
       </div>
     );
