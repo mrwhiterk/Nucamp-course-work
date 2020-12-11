@@ -32,8 +32,8 @@ function RenderCampsite({ campsite }) {
     </div>
   );
 }
-// now we need campsite to get the id of the current campsite and we need addComment to pass down to our form on line 48
-function RenderComments({ comments, addComment, campsiteId }) {
+// now we need campsite to get the id of the current campsite and we need postComment to pass down to our form on line 48
+function RenderComments({ comments, postComment, campsiteId }) {
   if (comments) {
     return (
       <div className="col-md-5 m-1">
@@ -54,7 +54,7 @@ function RenderComments({ comments, addComment, campsiteId }) {
             </div>
           );
         })}
-        <CommentForm campsiteId={campsiteId} addComment={addComment} />
+        <CommentForm campsiteId={campsiteId} postComment={postComment} />
       </div>
     );
   } else return <div />;
@@ -84,7 +84,7 @@ class CommentForm extends React.Component {
 
   handleSubmit = (values) => {
     this.toggleModal();
-    this.props.addComment(
+    this.props.postComment(
       this.props.campsiteId,
       values.rating,
       values.author,
@@ -177,11 +177,11 @@ class CommentForm extends React.Component {
   }
 }
 
-//I destructure addComment as well from props. In render comments im passing down campsite and addComment to be used by function
+//I destructure postComment as well from props. In render comments im passing down campsite and postComment to be used by function
 function CampsiteInfo({
   campsite,
   comments,
-  addComment,
+  postComment,
   campsitesLoading,
   campsitesErrMess,
 }) {
@@ -226,7 +226,7 @@ function CampsiteInfo({
         <div className="row">
           <RenderCampsite campsite={campsite} />
           <RenderComments
-            addComment={addComment}
+            postComment={postComment}
             comments={comments}
             campsiteId={campsite.id}
           />
