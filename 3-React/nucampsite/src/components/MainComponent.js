@@ -9,6 +9,7 @@ import Contact from "./ContactComponent";
 import About from "./AboutComponent";
 import { Switch, Route, Redirect, withRouter } from "react-router-dom";
 import { connect } from "react-redux";
+import { actions } from "react-redux-form";
 import { addComment, fetchCampsites } from "../redux/ActionCreators";
 
 const mapStateToProps = (state) => {
@@ -24,10 +25,10 @@ const mapDispatchToProps = {
   addComment: (campsiteId, rating, author, text) =>
     addComment(campsiteId, rating, author, text),
   fetchCampsites: () => fetchCampsites(),
+  resetFeedbackForm: () => actions.reset("feedbackForm"),
 };
 
 class Main extends Component {
-  
   componentDidMount() {
     this.props.fetchCampsites();
   }
@@ -37,8 +38,9 @@ class Main extends Component {
       return (
         <Home
           campsite={
-            this.props.campsites.campsites.filter((campsite) => campsite.featured)[0]
-            
+            this.props.campsites.campsites.filter(
+              (campsite) => campsite.featured
+            )[0]
           }
           campsitesLoading={this.props.campsites.isLoading}
           campsitesErrMess={this.props.campsites.errMess}
@@ -52,7 +54,7 @@ class Main extends Component {
 
     //inject addComment function as prop
     const CampsiteWithId = ({ match }) => {
-      console.log('this.props.campsites', this.props.campsites)
+      console.log("this.props.campsites", this.props.campsites);
       return (
         <CampsiteInfo
           campsite={
@@ -86,7 +88,13 @@ class Main extends Component {
             path="/aboutus"
             render={() => <About partners={this.props.partners} />}
           />
-          <Route exact path="/contactus" component={Contact} />
+          <Route
+            exact
+            path="/contactus"
+            render={() => (
+              <Contact resetFeedbackForm={this.props.resetFeedbackForm} />
+            )}
+          />
           <Redirect to="/home" />
         </Switch>
 
