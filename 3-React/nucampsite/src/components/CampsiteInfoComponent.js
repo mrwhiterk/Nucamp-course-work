@@ -16,6 +16,7 @@ import {
   BreadcrumbItem,
 } from "reactstrap";
 import { Control, LocalForm, Errors } from "react-redux-form";
+import Loading from "./LoadingComponent";
 
 import { Link } from "react-router-dom";
 
@@ -34,7 +35,6 @@ function RenderCampsite({ campsite }) {
 // now we need campsite to get the id of the current campsite and we need addComment to pass down to our form on line 48
 function RenderComments({ comments, addComment, campsiteId }) {
   if (comments) {
-    
     return (
       <div className="col-md-5 m-1">
         <h4>Comments</h4>
@@ -178,7 +178,29 @@ class CommentForm extends React.Component {
 }
 
 //I destructure addComment as well from props. In render comments im passing down campsite and addComment to be used by function
-function CampsiteInfo({ campsite, comments, addComment }) {
+function CampsiteInfo({ campsite, comments, addComment, campsitesLoading, campsitesErrMess }) {
+  if (campsitesLoading) {
+    return (
+      <div className="container">
+        <div className="row">
+          <Loading />
+        </div>
+      </div>
+    );
+  }
+
+  if (campsitesErrMess) {
+    return (
+      <div className="container">
+        <div className="row">
+          <div className="col">
+            <h4>{campsitesErrMess}</h4>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   if (campsite) {
     return (
       <div className="container">
