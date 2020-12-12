@@ -9,8 +9,8 @@ import {
 } from "reactstrap";
 import { Link } from "react-router-dom";
 import { baseUrl } from "../shared/baseUrl";
-import { partnersLoading } from "../redux/ActionCreators";
 import Loading from "./LoadingComponent";
+import { FadeTransform, Fade, Stagger } from "react-animation-components";
 
 function RenderPartner({ partner }) {
   if (partner) {
@@ -32,7 +32,6 @@ function RenderPartner({ partner }) {
 }
 
 const PartnerList = ({ partners }) => {
-  
   if (partners.isLoading) {
     return (
       <div className="container">
@@ -59,15 +58,19 @@ const PartnerList = ({ partners }) => {
 
   const partnerList = partners.partners.map((partner) => {
     return (
-      <Media tag="li" key={partner.id}>
-        <RenderPartner partner={partner} />
-      </Media>
+      <Fade in key={partner.id}>
+        <Media tag="li">
+          <RenderPartner partner={partner} />
+        </Media>
+      </Fade>
     );
   });
 
   return (
     <div className="col mt-4">
-      <Media list>{partnerList}</Media>
+      <Media list>
+        <Stagger in>{partnerList}</Stagger>
+      </Media>
     </div>
   );
 };
