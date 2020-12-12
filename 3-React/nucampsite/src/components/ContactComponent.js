@@ -40,8 +40,9 @@ class Contact extends React.Component {
   }
 
   handleSubmit(values) {
-    console.log("Current state is: " + JSON.stringify(values));
-    alert("Current state is: " + JSON.stringify(values));
+    
+   
+    this.props.postFeedback(values);
     this.props.resetFeedbackForm();
   }
 
@@ -93,7 +94,10 @@ class Contact extends React.Component {
             <hr />
           </div>
           <div className="col-md-10">
-            <Form model="feedbackForm" onSubmit={(values) => this.handleSubmit(values)}>
+            <Form
+              model="feedbackForm"
+              onSubmit={(values) => this.handleSubmit(values)}
+            >
               <Row className="form-group">
                 <Label htmlFor="firstName" md={2}>
                   First Name
@@ -209,7 +213,7 @@ class Contact extends React.Component {
                     component="div"
                     messages={{
                       required: "Required",
-                      
+
                       validEmail: "Invalid email address",
                     }}
                   />

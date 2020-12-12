@@ -11,12 +11,14 @@ import { Switch, Route, Redirect, withRouter } from "react-router-dom";
 import { connect } from "react-redux";
 import { actions } from "react-redux-form";
 import { TransitionGroup, CSSTransition } from "react-transition-group";
+
 import {
   postComment,
   fetchCampsites,
   fetchComments,
   fetchPromotions,
   fetchPartners,
+  postFeedback,
 } from "../redux/ActionCreators";
 
 const mapStateToProps = (state) => {
@@ -36,6 +38,7 @@ const mapDispatchToProps = {
   fetchComments: () => fetchComments(),
   fetchPromotions: () => fetchPromotions(),
   fetchPartners: () => fetchPartners(),
+  postFeedback: (values) => postFeedback(values),
 };
 
 class Main extends Component {
@@ -122,7 +125,10 @@ class Main extends Component {
                 exact
                 path="/contactus"
                 render={() => (
-                  <Contact resetFeedbackForm={this.props.resetFeedbackForm} />
+                  <Contact
+                    resetFeedbackForm={this.props.resetFeedbackForm}
+                    postFeedback={this.props.postFeedback}
+                  />
                 )}
               />
               <Redirect to="/home" />
