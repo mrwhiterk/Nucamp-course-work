@@ -8,12 +8,20 @@ import {
   Media,
 } from "reactstrap";
 import { Link } from "react-router-dom";
+import { baseUrl } from "../shared/baseUrl";
+import { partnersLoading } from "../redux/ActionCreators";
+import Loading from "./LoadingComponent";
 
 function RenderPartner({ partner }) {
   if (partner) {
     return (
       <>
-        <Media object src={partner.image} alt={partner.name} width="150" />
+        <Media
+          object
+          src={baseUrl + partner.image}
+          alt={partner.name}
+          width="150"
+        />
         <Media body className="ml-5 mb-4">
           <Media heading>{partner.name}</Media>
           {partner.description}
@@ -23,8 +31,33 @@ function RenderPartner({ partner }) {
   } else return <div />;
 }
 
-function About(props) {
-  const partners = props.partners.map((partner) => {
+const PartnerList = ({ partners }) => {
+  
+  if (partners.isLoading) {
+    return (
+      <div className="container">
+        <div className="row">
+          <Loading />
+        </div>
+      </div>
+    );
+  }
+
+  if (partners.errMess) {
+    return (
+      <div className="container">
+        <div className="row">
+          <div className="col">
+            <h4>{partners.errMess}</h4>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  console.log("partners", partners);
+
+  const partnerList = partners.partners.map((partner) => {
     return (
       <Media tag="li" key={partner.id}>
         <RenderPartner partner={partner} />
@@ -32,6 +65,14 @@ function About(props) {
     );
   });
 
+  return (
+    <div className="col mt-4">
+      <Media list>{partnerList}</Media>
+    </div>
+  );
+};
+
+function About(props) {
   return (
     <div className="container">
       <div className="row">
@@ -102,7 +143,7 @@ function About(props) {
           <h3>Community Partners</h3>
         </div>
         <div className="col mt-4">
-          <Media list>{partners}</Media>
+          <PartnerList partners={props.partners} />
         </div>
       </div>
     </div>
