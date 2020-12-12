@@ -4,7 +4,6 @@ import {
   CardImg,
   CardText,
   CardBody,
-  CardTitle,
   Breadcrumb,
   Button,
   Label,
@@ -74,7 +73,7 @@ function RenderComments({ comments, postComment, campsiteId }) {
 const required = (val) => val && val.length;
 const maxLength = (len) => (val) => !val || val.length <= len;
 const minLength = (len) => (val) => val && val.length >= len;
-const isNumber = (val) => !isNaN(+val);
+// const isNumber = (val) => !isNaN(+val);
 
 class CommentForm extends React.Component {
   state = {

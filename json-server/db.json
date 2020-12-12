@@ -201,6 +201,14 @@
       "text": "monkey",
       "date": "2020-12-11T23:08:06.164Z",
       "id": 20
+    },
+    {
+      "campsiteId": 0,
+      "rating": "2",
+      "author": "aa",
+      "text": "bb",
+      "date": "2020-12-12T00:30:02.758Z",
+      "id": 21
     }
   ],
   "partners": [
